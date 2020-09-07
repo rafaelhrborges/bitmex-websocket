@@ -18,8 +18,7 @@ def get_reqs_from_file(file):
 
     # reqs is a list of requirement
     # e.g. ['django==1.5.1', 'mezzanine==1.4.6']
-    return [str(ir.req) for ir in install_requirements]
-
+    return [str(ir.requirement) for ir in install_requirements]
 
 def get_version_info():
     version_file = open(realpath('./.version'))
