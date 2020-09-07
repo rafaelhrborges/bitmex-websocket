@@ -27,6 +27,8 @@ class BitMEXWebsocket(
         heartbeat=True,
         ping_interval=10,
         ping_timeout=9,
+        api_key=None,
+        api_secret=None,
         **kwargs
     ):
         self.ping_timeout = ping_timeout
@@ -35,6 +37,9 @@ class BitMEXWebsocket(
         self.heartbeat = heartbeat
         self.channels = []
         self.reconnect_count = 0
+
+        self.api_key = api_key or settings.BITMEX_API_KEY
+        self.api_secret = api_secret or settings.BITMEX_API_SECRET
 
         super().__init__(
             url=self.gen_url(),
@@ -127,16 +132,16 @@ class BitMEXWebsocket(
             alog.info("Authenticating with API Key.")
             # To auth to the WS using an API key, we generate a signature
             # of a nonce and the WS API endpoint.
-            alog.info((settings.BITMEX_API_KEY, settings.BITMEX_API_SECRET))
+            alog.info((self.api_key, self.api_secret))
 
             nonce = generate_nonce()
             api_signature = generate_signature(
-                settings.BITMEX_API_SECRET, 'GET', '/realtime', nonce, '')
+                self.api_secret, 'GET', '/realtime', nonce, '')
 
             auth_header = [
                 "api-nonce: " + str(nonce),
                 "api-signature: " + api_signature,
-                "api-key:" + settings.BITMEX_API_KEY
+                "api-key:" + self.api_key
             ]
 
             alog.info(alog.pformat(auth_header))
