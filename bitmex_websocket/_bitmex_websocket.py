@@ -29,6 +29,7 @@ class BitMEXWebsocket(
         ping_timeout=9,
         api_key=None,
         api_secret=None,
+        base_url=None,
         **kwargs
     ):
         self.ping_timeout = ping_timeout
@@ -40,6 +41,7 @@ class BitMEXWebsocket(
 
         self.api_key = api_key or settings.BITMEX_API_KEY
         self.api_secret = api_secret or settings.BITMEX_API_SECRET
+        self.base_url = base_url or settings.BASE_URL
 
         super().__init__(
             url=self.gen_url(),

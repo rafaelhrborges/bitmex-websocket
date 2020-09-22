@@ -7,6 +7,9 @@ from bitmex_websocket._bitmex_websocket import BitMEXWebsocket
 
 from bitmex_websocket.constants import Channels, SecureChannels, \
     SecureInstrumentChannels, InstrumentChannels
+
+from collections import defaultdict, OrderedDict
+
 import click
 
 __all__ = ['Instrument']
@@ -25,7 +28,9 @@ class Instrument(BitMEXWebsocket):
                  symbol: str = 'XBTUSD',
                  channels: [Channels] or [str] = None,
                  should_auth=False, **kwargs):
-
+        
+        self._events = defaultdict(OrderedDict)
+        
         super().__init__(should_auth=should_auth, **kwargs)
 
         if channels is None:
